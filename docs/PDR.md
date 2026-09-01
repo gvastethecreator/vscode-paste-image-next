@@ -1,5 +1,5 @@
-Repo: `X:\vscode-extensions\paste-image-next`
-Remote: private (`gvastethecreator/paste-image-next`)
+Repo: `X:\vscode-extensions\vscode-paste-image-next`
+Remote: private (`gvastethecreator/vscode-paste-image-next`)
 
 # PDR — Paste Image Next
 
