@@ -12,7 +12,11 @@ Paste Image Next turns an image in the system clipboard into a project asset and
 
 ## Opportunity
 
-The long-lived Paste Image category proved sustained demand, while many implementations predate current VS Code web/remote/virtual-workspace guidance and modern frontend asset conventions. The opportunity is a clean implementation that handles path policy, naming, insertion formats and remote/workspace behavior explicitly.
+The long-lived Paste Image category proved demand. Many implementations predate current VS Code web, remote, and virtual-workspace guidance.
+
+**Native overlap:** VS Code already pastes clipboard images into Markdown and copies them into the workspace. Setting: `markdown.copyFiles.destination`. Docs: https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files (reviewed 2026-08-19).
+
+v1 must not intercept Markdown Ctrl+V. Remaining job: HTML, CSS, MDX, and JavaScript/TypeScript insertion, naming policy, and desktop clipboard bytes. `vscode.env.clipboard` exposes `readText` and `writeText` only.
 
 Historical category reference:
 - https://marketplace.visualstudio.com/items?itemName=mushan.vscode-paste-image
@@ -45,11 +49,11 @@ From an active editor, invoke one command and turn the current clipboard image i
 
 ## Supported insertion modes
 
-MVP:
+MVP (do not steal Markdown Ctrl+V):
 
-- Markdown: `![alt](relative/path.png)`
-- MDX: Markdown syntax by default, configurable to JSX `<img>` later
 - HTML: `<img src="..." alt="...">`
+- MDX: JSX `<img>` or Markdown syntax by setting
+- Markdown command path only if the user runs Paste Image Next on a `.md` file and native paste is insufficient
 - CSS/SCSS/Less: `url("...")`
 - JavaScript/TypeScript: optional path-only insertion in v1; import generation may be post-MVP because module semantics vary.
 
