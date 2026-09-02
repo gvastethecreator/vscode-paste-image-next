@@ -1,263 +1,201 @@
-Repo: `X:\vscode-extensions\vscode-paste-image-next`
-Remote: private (`gvastethecreator/vscode-paste-image-next`)
+Repo: X:\vscode-extensions\vscode-paste-image-next
+Remote: private (gvastethecreator/vscode-paste-image-next)
 
 # PDR — Paste Image Next
 
 ## Status
-Scaffolded · Priority P0
+
+Release candidate implementation · 0.1.0 · not published
+
+The feature, tests, browser bundle, package checks, and release-candidate workflow are implemented. Public publication and the manual remote matrix remain separate release gates.
 
 ## Product summary
 
-Paste Image Next turns an image in the system clipboard into a project asset and inserts the correct reference into the current document. The experience should feel like native paste: fast, deterministic, configurable, and safe across project layouts.
+Paste Image Next turns one PNG or JPEG supplied by VS Code during a user-initiated paste into a project asset and inserts a reference suited to the active document. It uses VS Code's native Paste and Paste As flow, stays local, and adds no custom settings page or webview.
 
-## Opportunity
+## Product position
 
-The long-lived Paste Image category proved demand. Many implementations predate current VS Code web, remote, and virtual-workspace guidance.
+VS Code already handles image paste in Markdown. Paste Image Next does not replace that behavior.
 
-**Native overlap:** VS Code already pastes clipboard images into Markdown and copies them into the workspace. Setting: `markdown.copyFiles.destination`. Docs: https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files (reviewed 2026-08-19).
+Its primary job is image paste for HTML, CSS, SCSS, Less, and MDX. Explicit Paste As also provides Markdown and path-only choices without guessing in unknown languages.
 
-v1 must not intercept Markdown Ctrl+V. Remaining job: HTML, CSS, MDX, and JavaScript/TypeScript insertion, naming policy, and desktop clipboard bytes. `vscode.env.clipboard` exposes `readText` and `writeText` only.
+## User flow
 
-Historical category reference:
-- https://marketplace.visualstudio.com/items?itemName=mushan.vscode-paste-image
+### Normal paste
 
-## Target users
+1. Copy one supported image.
+2. Paste in an HTML, CSS, SCSS, Less, or MDX editor.
+3. VS Code requests the extension's paste edit.
+4. The selected edit creates the asset and inserts its reference as one workspace transaction.
 
-- Markdown/MDX writers;
-- documentation maintainers;
-- frontend developers;
-- developers taking screenshots for issues/docs/tests;
-- note-taking workflows inside repositories.
+Normal Markdown paste remains native by default. Unknown languages receive no automatic edit.
 
-## Core job
+### Paste As
 
-From an active editor, invoke one command and turn the current clipboard image into:
+Paste As offers:
 
-1. a correctly named image file;
-2. written to a predictable destination;
-3. referenced at the cursor using syntax appropriate to the current language.
+- the language-appropriate asset reference;
+- a detailed variant that asks for the file name;
+- alt text when the format supports it;
+- Markdown syntax in Markdown;
+- an encoded relative path in other languages.
 
-## MVP workflow
+Canceling an input prompt is silent and creates nothing.
 
-1. User copies an image/screenshot.
-2. Runs `Paste Image Next: Paste Image`.
-3. Extension resolves destination from workspace/document/settings.
-4. Extension creates a collision-safe filename.
-5. Image bytes are written.
-6. Appropriate reference is inserted at current selection/cursor.
-7. Undo should remove the text edit; asset cleanup behavior must be explicit and never destructive by surprise.
+## Supported inputs
 
-## Supported insertion modes
+- one DataTransferFile per paste;
+- image/png;
+- image/jpeg and image/jpg;
+- file entries with a .png, .jpg, or .jpeg name when their MIME is generic;
+- maximum size of 50 MiB by default, configurable from 1 to 100 MiB.
 
-MVP (do not steal Markdown Ctrl+V):
+The extension preserves the source bytes. It does not decode, transcode, optimize, upload, or execute image data. SVG, GIF, WebP, unknown image MIME types, empty files, and conflicting MIME/name/signature combinations are rejected.
 
-- HTML: `<img src="..." alt="...">`
-- MDX: JSX `<img>` or Markdown syntax by setting
-- Markdown command path only if the user runs Paste Image Next on a `.md` file and native paste is insufficient
-- CSS/SCSS/Less: `url("...")`
-- JavaScript/TypeScript: optional path-only insertion in v1; import generation may be post-MVP because module semantics vary.
+## Inserted references
 
-Unknown languages default to path insertion or Quick Pick rather than guessing.
+| Language | Automatic result |
+| --- | --- |
+| HTML | <img src="./assets/image.png" alt=""> |
+| CSS, SCSS, Less | url("./assets/image.png") |
+| MDX | <img src="./assets/image.png" alt="" /> |
+| Markdown | Native VS Code behavior; extension yields by default |
+| Other | No automatic edit; Paste As can insert the path |
 
-## File formats
+Paths always use forward slashes. URI segments are encoded. HTML attributes, CSS strings, Markdown alt text, and MDX attributes are escaped for their target syntax.
 
-MVP should preserve a clipboard image in a lossless, predictable format, preferably PNG when conversion is required.
+## Settings
 
-WebP/JPEG conversion is post-MVP unless the chosen platform implementation makes it low-risk and dependency-light.
+All settings use VS Code's native Settings UI.
 
-## Naming templates
+| Setting | Default | Contract |
+| --- | --- | --- |
+| pasteImageNext.destination | ${documentDir}/assets | Asset directory relative to the document or active workspace |
+| pasteImageNext.filename | image-${date}-${time} | File-name template |
+| pasteImageNext.askForName | false | Ask for a name after the edit is selected |
+| pasteImageNext.pathStyle | documentRelative | documentRelative or workspaceRelative |
+| pasteImageNext.markdown.enabled | false | Offer the extension during normal Markdown paste while yielding to VS Code |
+| pasteImageNext.maximumFileSizeMiB | 50 | Integer from 1 to 100 |
 
-Default example:
+Destination tokens: ${documentDir}, ${workspaceFolder}, and ${documentName}.
 
-```text
-image-2026-09-01-143501.png
-```
+Filename tokens: ${date}, ${time}, ${documentName}, ${name}, and ${counter}.
 
-Template tokens may include:
+No environment variables, shell expansion, URI schemes, absolute paths, or parent traversal are accepted.
 
-- date/time;
-- active document basename;
-- counter;
-- sanitized user-provided stem.
+## Destination and naming rules
 
-Requirements:
+The default destination is an assets folder beside the active document. A workspace token resolves to the workspace folder containing that document, including multi-root workspaces.
 
-- sanitize path separators/reserved characters;
-- handle Windows reserved filenames;
-- avoid overwrite by default;
-- deterministic collision suffixing.
+Documents outside a workspace may write only within their own directory. Untitled documents, read-only filesystems, invalid settings, and destinations outside the allowed root fail with an actionable message.
 
-## Destination policy
+File stems are Unicode-aware, capped at 96 characters, normalized for unsafe punctuation, and protected from Windows reserved names. Destination settings and segments have conservative length limits. Existing files are never overwritten. Collisions use deterministic suffixes:
 
-Proposed setting model:
+- image.png
+- image-2.png
+- image-3.png
 
-```json
-{
-  "pasteImageNext.destination": "${documentDir}/assets",
-  "pasteImageNext.filename": "image-${date}-${time}",
-  "pasteImageNext.markdownPathStyle": "relative",
-  "pasteImageNext.askForName": false,
-  "pasteImageNext.overwrite": "never"
-}
-```
+A file appearing after allocation causes the whole edit to fail instead of being overwritten.
 
-Potential tokens:
+## Architecture
 
-- `${workspaceFolder}`
-- `${documentDir}`
-- `${documentName}`
+- Stable DocumentPasteEditProvider and DataTransferFile APIs.
+- WorkspaceEdit.createFile with binary contents and no overwrite.
+- Node bundle: dist/node/extension.cjs.
+- Browser bundle: dist/web/extension.cjs.
+- Browser-safe core with no Node runtime dependency.
+- Pure filename, media, destination, path, and formatter modules under src/core.
+- Lazy onLanguage activation with no startup scan.
+- Provider registered through VS Code APIs only.
+- No commands because stable VS Code APIs do not expose a safe custom command that invokes native binary paste.
+- No native helper, shell, temporary file, daemon, network request, telemetry, or runtime dependency.
+- Host preference: ui first, workspace second. VS Code APIs route filesystem work to the active workspace, while the browser bundle covers web hosts.
 
-Do not permit arbitrary shell/environment expansion in path templates.
+## Markdown policy
 
-## Commands
+Normal Markdown Ctrl+V is not intercepted by default. Explicit Paste As always exposes the extension's Markdown edit.
 
-- `Paste Image Next: Paste Image`
-- `Paste Image Next: Paste Image As...`
-- `Paste Image Next: Copy Asset Path` (post-MVP candidate)
+If pasteImageNext.markdown.enabled is enabled, the extension may participate in normal Markdown paste but declares that VS Code's markdown.link.image edit wins.
 
-## Explicit non-goals
+## Undo and redo
 
-- cloud image hosting;
-- image CDN upload;
-- screenshot capture UI;
-- full image editor;
-- OCR;
-- automatic optimization pipeline in v1;
-- background watching of clipboard contents;
-- arbitrary executable conversion commands.
+The asset creation and reference insertion are one native workspace edit.
 
-## Architecture challenge: clipboard image access
+- Undo removes both the inserted reference and the created asset.
+- Redo restores both.
+- If the asset was modified after creation, undo still removes it and redo restores the modified bytes.
 
-Text clipboard access through VS Code is straightforward; binary image clipboard access is not uniformly exposed as a simple stable cross-platform VS Code API. This is the core feasibility spike for this project.
+This behavior is covered by an Extension Host integration test and must be stated in the Marketplace listing.
 
-Before implementation, prototype platform strategies and choose one of these product positions:
+## Security and privacy
 
-1. **Desktop-first extension** using minimal platform-specific clipboard integration, with web unsupported.
-2. **Companion/helper strategy** only if unavoidable, but avoid daemons/installers for v1.
-3. If stable VS Code APIs have evolved by implementation time, prefer them and revise this PDR.
-
-Do not claim web compatibility until binary clipboard behavior is proven.
-
-## Platform strategy requirements
-
-- Windows/macOS/Linux behavior documented separately;
-- no shell-command interpolation from workspace-controlled settings;
-- temporary files cleaned reliably if used;
-- clipboard data never transmitted;
-- native helper dependency, if any, must have active maintenance and clear licensing;
-- packaged binaries would require architecture matrix and substantially increase maintenance burden, so avoid them if possible.
-
-## VS Code APIs
-
-Likely:
-
-- `window.activeTextEditor`
-- `WorkspaceEdit`
-- `workspace.fs`
-- `Uri`
-- configuration APIs
-- commands
-- Quick Pick/Input Box
-- progress notification only for operations slow enough to justify it.
-
-## Relative path rules
-
-Path generation must be tested for:
-
-- Windows drive letters;
-- POSIX paths;
-- spaces/unicode;
-- nested document/asset directories;
-- multi-root workspaces;
-- remote URIs;
-- non-file URI schemes if supported.
-
-Inserted source paths should use URI/path conventions appropriate to target syntax, not host OS separators blindly.
-
-## Security/privacy
-
-Clipboard images can be sensitive.
-
-- bytes stay local;
-- no telemetry about image contents/names;
-- no implicit cloud upload;
-- destination is always visible/predictable;
-- never overwrite without explicit configured/user choice;
-- sanitize all generated paths;
-- no executable post-processing from workspace configuration in v1.
+- Image bytes are read only inside a user-initiated paste request. VS Code invalidates DataTransfer after the provider returns, so eligible bytes are validated before options are returned; the filesystem is not touched until an option is selected.
+- No background clipboard polling.
+- No network access or cloud upload.
+- No telemetry or content logging.
+- No document text, image bytes, names, paths, or alt text are logged.
+- No execution of workspace code, commands, binaries, or settings.
+- Bounded media size and collision attempts.
+- Runtime validation of MIME, signature, names, settings, destination, writability, cancellation, and document version.
+- PNG and JPEG only; active-content SVG is rejected.
+- Restricted Mode is supported because no workspace code executes.
+- Runtime bundles contain no third-party production dependency.
 
 ## Compatibility
 
-| Environment | Goal |
-| --- | --- |
-| Desktop Windows | Full |
-| Desktop macOS | Full |
-| Desktop Linux | Full if clipboard strategy supports it reliably |
-| Web/vscode.dev | Unsupported unless stable binary clipboard path exists |
-| Virtual Workspace | Limited; depends on clipboard strategy and writable `workspace.fs` |
-| Restricted Mode | Paste/write may be supported if no workspace code executes; restrict dangerous settings if introduced |
-| Remote/Codespaces | Must distinguish local clipboard from remote workspace filesystem and test explicitly |
+| Environment | Declaration | Evidence or release gate |
+| --- | --- | --- |
+| Desktop Node host | Supported | Local Windows stable and minimum-version Extension Host tests passed; the minimum/stable/macOS/Linux hosted matrix is configured as a merge gate |
+| Web host | Supported | Browser bundle exercised with the official web test host |
+| Writable virtual workspace | Supported | Binary create and text insertion tested on a non-file filesystem |
+| Read-only virtual workspace | Unsupported by design | Rejected before image bytes are read, an edit is offered, or any mutation occurs |
+| Restricted Mode | Supported | No execution, shell, network, or trust-sensitive operation |
+| WSL, SSH, Dev Containers | Intended support | API-only path; manual packaged test required before advertising as verified |
+| Codespaces | Intended support | Browser/remote packaged test required before advertising as verified |
+| Platform-specific behavior | None in runtime | Windows, macOS, and Linux hosted tests gate merge |
 
-The local-clipboard/remote-workspace split is a key acceptance scenario.
+The release listing must distinguish tested local/web behavior from remote scenarios that have not received a real packaged smoke test.
 
-## Undo semantics
+## Performance budgets
 
-Text insertion participates in editor undo naturally. The created binary file cannot safely be coupled to editor undo without potentially deleting a file the user has since modified or referenced.
+- no activation work beyond provider registration;
+- eligibility before byte read under 10 ms;
+- normal pure planning under 20 ms;
+- Node and web bundles each below 300 KiB;
+- no persistent image cache;
+- one source-byte read;
+- cancellation checked before and after asynchronous work;
+- at most 100 collision candidates.
 
-Policy for v1:
+## Verification contract
 
-- editor undo removes only inserted text;
-- created asset remains;
-- document this clearly;
-- optional `Delete Last Pasted Image` command may be considered later with strict safety checks.
+Release checks cover:
 
-## Testing
+- pure unit tests for media, names, tokens, paths, formatters, limits, and escaping;
+- desktop Extension Host tests for activation, eligibility, filtering, no pre-selection mutation, transactions, collision races, cancellation, Markdown ordering, untitled/read-only failures, and modified-asset undo/redo;
+- browser Extension Host test against a writable virtual filesystem;
+- current stable plus declared minimum VS Code;
+- Windows, macOS, and Linux hosted jobs;
+- production bundles and performance budgets;
+- minimal VSIX contents and alpha-bearing 256 px icon / 1200 by 800 preview;
+- clean-profile VSIX installation and activation.
 
-Unit:
+Non-Windows real OS clipboard smoke tests and remote/Codespaces verification remain human release gates because synthetic DataTransfer tests cannot prove operating-system clipboard metadata.
 
-- filename sanitization;
-- template expansion;
-- collision policy;
-- relative path computation;
-- insertion syntax by language;
-- Windows/POSIX cases;
-- multi-root resolution.
+## Non-goals for 0.1.0
 
-Integration/manual matrix:
-
-- Windows clipboard screenshot;
-- macOS screenshot;
-- common Linux clipboard environments where supported;
-- local workspace;
-- WSL/SSH/Codespaces where feasible;
-- untitled document;
-- document outside workspace;
-- read-only destination;
-- clipboard without image;
-- duplicate filename;
-- unicode paths.
-
-## Acceptance criteria
-
-- one primary command from clipboard to inserted reference;
-- never overwrites an asset by default;
-- generated references resolve correctly from current document;
-- no clipboard/image network transfer;
-- Windows/macOS/Linux support truthfully documented;
-- remote-workspace behavior is tested rather than assumed;
-- failures never leave corrupt partial files;
-- temporary resources are cleaned.
-
-## Post-MVP
-
-- WebP/JPEG conversion;
-- configurable quality;
-- automatic dimension metadata;
-- MDX/React import mode;
-- paste multiple clipboard images if platform permits;
-- asset optimization adapters, but only as explicit opt-in actions;
-- smart alt-text prompt without external AI dependency.
+- Markdown replacement;
+- multiple images per paste;
+- WebP, GIF, SVG, or conversion;
+- JavaScript/TypeScript import generation;
+- screenshot capture UI;
+- image editing or optimization;
+- OCR or AI alt text;
+- cloud hosting or CDN upload;
+- overwrite mode;
+- custom settings UI or webview;
+- cleanup commands.
 
 ## Definition of done
 
-Feasibility spike for binary clipboard complete, platform support matrix proven, implementation/tests/docs/package/assets/release automation complete, and limitations prominent in Marketplace listing.
+The implementation is complete when source, tests, docs, icon, runtime preview, Node/browser bundles, CI, and inspected VSIX agree with this contract. Publication requires separate authorization plus real clipboard and advertised-environment smoke tests.

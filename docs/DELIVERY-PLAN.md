@@ -1,33 +1,33 @@
 # Paste Image Next — Complete delivery plan
 
-Status: execution specification and feasibility plan  
-Repository: `gvastethecreator/vscode-paste-image-next`  
-Product phase: scaffold  
-First public target: `0.1.0`, only after the paste-data spike passes  
-Last reviewed: 2026-09-01
+Status: implementation record and release checklist
 
-This document supersedes outdated implementation assumptions in `docs/PDR.md` while preserving its product intent. Current stable VS Code exposes `DocumentPasteEditProvider`, `DataTransfer`, `DataTransferFile.data()`, and `WorkspaceEdit.createFile(..., { contents })`. These APIs may allow a cross-platform, web-compatible implementation without shell commands or bundled native helpers. That path must be proven first.
+Repository: `gvastethecreator/vscode-paste-image-next`
+
+Product phase: `0.1.0` release candidate
+
+First public target: `0.1.0`, only after the remaining human release gates pass
+
+Last reviewed: 2026-09-02
+
+This document began as the implementation plan. `docs/PDR.md` now holds the final product contract. Stable `DocumentPasteEditProvider`, `DataTransferFile.data()`, and `WorkspaceEdit.createFile(..., { contents })` are the selected architecture; the implementation uses no shell command, native helper, temporary file, runtime dependency, telemetry, or network access.
 
 ---
 
 ## 1. Current state
 
-The repository includes a consistent scaffold:
+The repository now includes:
 
-- strict TypeScript, esbuild, pnpm, and CI;
-- two contributed commands;
-- PDR, security/development/publishing notes, agent guidance, icon, and preview;
-- aspirational Virtual Workspace and Restricted Mode support.
+- strict TypeScript, pure core modules, and a stable paste provider;
+- PNG/JPEG validation, bounded native settings, URI-safe destinations, deterministic names, collision protection, and escaped language formatters;
+- one transactional resource/text edit with tested undo, redo, cancellation, read-only, untitled, and late-race behavior;
+- Node and browser bundles with desktop and writable virtual-filesystem Extension Host tests;
+- Windows, macOS, Linux, minimum-version, stable, Insiders, web, performance, VSIX inspection, and clean-profile package jobs;
+- final product/security/development/publishing documentation;
+- a transparent geometric icon and a real VS Code runtime preview with native PNG clipboard proof;
+- no commands or custom settings webview.
 
-The product is not implemented:
-
-- both commands invoke a shared not-implemented handler;
-- the only unit test checks the Node test runner;
-- no paste provider, DataTransfer inspection, binary file creation, destination resolver, naming policy, collision handling, reference formatter, or edit transaction exists;
-- no platform test evidence exists;
-- no browser entry, Extension Host test, or packaged VSIX smoke test exists;
-- `package.json` declares ESM while esbuild emits CommonJS to a `.js` file;
-- the current command-first PDR assumes binary clipboard access must come from a native/platform helper, but the current paste-edit APIs need to be evaluated before adopting that complexity.
+Publication, registry state changes, tags, releases, and remote/Codespaces compatibility claims remain outside this implementation change and require explicit authorization plus their named manual smoke tests.
 
 ---
 
@@ -49,13 +49,9 @@ This integrates with VS Code's paste widget and competing providers instead of t
 
 ### Commands
 
-The existing commands must be reconsidered:
+Decision: remove both scaffold commands. Stable VS Code APIs do not expose the current binary paste payload to a custom extension command, and undocumented built-in command delegation is not a product contract.
 
-- `Paste Image Next: Paste Image` can only remain if it can trigger the normal paste pipeline through a stable documented command/API; it cannot read image bytes through `vscode.env.clipboard`, which exposes text only.
-- `Paste Image Next: Paste Image As...` should delegate to the native Paste As experience where a stable documented path exists.
-- If a reliable command flow cannot be implemented without undocumented built-in commands, remove or rename these commands before publication and make normal Paste/Paste As the public contract.
-
-Do not publish dead commands merely because they exist in the scaffold.
+Normal editor Paste and Paste As are the complete public interaction. The manifest, README, tests, and package contain no extension command.
 
 ### Markdown overlap
 
@@ -70,25 +66,25 @@ Default policy:
 
 ---
 
-## 3. Blocking feasibility spike
+## 3. Feasibility decision and remaining environment evidence
 
-No implementation roadmap may assume image MIME behavior. Build a minimal spike extension and record real DataTransfer observations without committing sensitive image bytes.
+The API-only design passed synthetic DataTransfer, transaction, browser-host, and writable virtual-filesystem tests. Real OS clipboard metadata and remote-host placement cannot be proven by synthetic fixtures, so they remain explicit release gates rather than hidden assumptions.
 
 ### 3.1 Environments
 
 Test:
 
-| Environment | Required evidence |
+| Environment | Current evidence / remaining gate |
 | --- | --- |
-| Windows 11 desktop | Screenshot copied through Snipping Tool and image copied from browser/file manager. |
-| macOS desktop | Screenshot and copied image. |
-| Linux X11 | Screenshot and copied image where available. |
-| Linux Wayland | Screenshot and copied image where available. |
-| WSL workspace | Local clipboard with remote/WSL workspace destination. |
-| Remote SSH | Local clipboard with remote filesystem destination. |
-| GitHub Codespaces | Browser/local clipboard with remote workspace. |
-| `vscode.dev` | Browser clipboard, virtual workspace, and browser security limitations. |
-| `github.dev` | Repository virtual workspace if writable workflow is meaningful. |
+| Windows 11 desktop | Real Ctrl+V with a known native PNG preserved exact bytes and alpha; synthetic failure/transaction coverage also passed. |
+| macOS desktop | Hosted stable suite configured; real clipboard smoke remains a release gate. |
+| Linux X11 | Hosted minimum/stable/Insiders suite configured; real clipboard smoke remains a release gate. |
+| Linux Wayland | Real clipboard smoke remains a release gate. |
+| WSL workspace | Packaged local-clipboard/remote-write smoke remains a release gate. |
+| Remote SSH | Packaged local-clipboard/remote-write smoke remains a release gate. |
+| GitHub Codespaces | Packaged browser/local clipboard and remote-write smoke remains a release gate. |
+| `vscode.dev` | Browser host and writable virtual filesystem pass synthetically; manual browser clipboard remains a release gate. |
+| `github.dev` | Not advertised; repository write behavior requires a manual test. |
 
 ### 3.2 Data to record
 
@@ -110,19 +106,11 @@ For each test, record only metadata:
 
 Never log image contents or base64.
 
-### 3.3 Spike exit criteria
+### 3.3 Spike outcome
 
-The API-first architecture is approved if:
+The API-first architecture is accepted for the current release candidate because Windows real clipboard paste, one-operation asset/reference creation, native undo/redo, Markdown ordering, cancellation, collision handling, browser-host execution, and writable virtual filesystems are proven without a shell or native helper.
 
-- at least Windows and macOS clipboard screenshots produce accessible bytes;
-- asset creation and reference insertion work in one paste operation;
-- no shell/native executable is required;
-- remote workspace write works through a URI-based edit or has a clearly documented limitation;
-- behavior when Markdown's built-in provider is present can be controlled with selector/kind/yield ordering;
-- cancellation does not leave partial files;
-- filename collisions can be resolved before edit application.
-
-Linux and web support may be included only where proven. Unsupported environments must be declared truthfully.
+The original broad desktop criterion also required real macOS clipboard evidence. That and real Linux clipboard evidence remain publication gates, so the release listing must not describe either clipboard path as manually verified yet. Remote-host and Codespaces claims remain similarly limited until their packaged smoke tests pass.
 
 ### 3.4 Native helper fallback policy
 
@@ -182,7 +170,7 @@ Markdown is excluded/yielded by default.
 
 Register `languages.registerDocumentPasteEditProvider` with:
 
-- a narrow document selector;
+- a scheme-wide selector so explicit Paste As can work in any saved document, with automatic edits limited by language policy;
 - `pasteMimeTypes` containing proven `image/*` and/or `files` patterns;
 - a unique `DocumentDropOrPasteEditKind` hierarchy;
 - `providedPasteEditKinds` matching actual returned edits;
@@ -191,7 +179,9 @@ Register `languages.registerDocumentPasteEditProvider` with:
 Provider rules:
 
 - inspect DataTransfer synchronously enough to identify eligibility;
-- defer expensive byte reads or destination preparation to `resolveDocumentPasteEdit` where appropriate;
+- read `DataTransferFile.data()` before `provideDocumentPasteEdits` returns because VS Code invalidates the transfer afterward;
+- retain only the validated byte array and media result in offered edits;
+- defer destination allocation and every filesystem mutation to `resolveDocumentPasteEdit` and final edit application;
 - honor cancellation tokens before and after every async boundary;
 - return no edit for unsupported MIME/source rather than throwing;
 - never mutate the filesystem directly during `provideDocumentPasteEdits` if the edit has not been selected;
@@ -227,15 +217,16 @@ Undo/redo semantics must be measured. Document whether undo removes both inserte
 
 ## 6. Destination resolution
 
-### Proposed settings
+### Final settings
 
 ```json
 {
   "pasteImageNext.destination": "${documentDir}/assets",
   "pasteImageNext.filename": "image-${date}-${time}",
   "pasteImageNext.askForName": false,
-  "pasteImageNext.pathStyle": "relative",
-  "pasteImageNext.markdown.enabled": false
+  "pasteImageNext.pathStyle": "documentRelative",
+  "pasteImageNext.markdown.enabled": false,
+  "pasteImageNext.maximumFileSizeMiB": 50
 }
 ```
 
@@ -258,7 +249,7 @@ Rules:
 - untitled documents require a chosen workspace folder/destination;
 - multi-root selection uses the folder containing the active document, or prompts if ambiguous;
 - parent directories are created only through explicit resource edits/approved API path;
-- read-only/virtual schemes fail cleanly;
+- read-only schemes reject before bytes are read; writable virtual schemes use the same URI/resource-edit path;
 - destination must remain visible in Paste As title/detail or confirmation when ambiguous.
 
 ### Path generation
@@ -384,41 +375,27 @@ Return no automatic provider edit. An explicit Paste As option may insert a rela
 
 ## 9. Architecture
 
-Recommended structure:
+Implemented structure:
 
 ```text
 src/
 ├─ extension.ts
-├─ paste/
-│  ├─ provider.ts
-│  ├─ kinds.ts
-│  ├─ dataTransfer.ts
-│  └─ resolveEdit.ts
-├─ core/
-│  ├─ media.ts
-│  ├─ filename.ts
-│  ├─ templates.ts
-│  ├─ collisions.ts
-│  ├─ limits.ts
-│  └─ result.ts
-├─ destination/
-│  ├─ context.ts
-│  ├─ resolve.ts
-│  ├─ relativePath.ts
-│  └─ directories.ts
-├─ formatters/
-│  ├─ formatter.ts
-│  ├─ html.ts
-│  ├─ css.ts
-│  ├─ mdx.ts
-│  └─ pathOnly.ts
-├─ commands/
-│  └─ pasteAs.ts
-└─ platform/
-   ├─ configuration.ts
-   ├─ workspaceEdit.ts
-   ├─ logging.ts
-   └─ feedback.ts
+├─ pasteProvider.ts
+└─ core/
+   ├─ media.ts
+   ├─ filename.ts
+   ├─ paths.ts
+   └─ formatters.ts
+
+test/
+├─ integration/
+├─ runner/
+└─ web/
+
+scripts/
+├─ build-web-tests.mjs
+├─ inspect-vsix.mjs
+└─ performance.mjs
 ```
 
 Pure modules must not import `vscode`:
@@ -444,14 +421,14 @@ Correct the current ESM/CommonJS mismatch.
 Recommended target after spike:
 
 - Node: `dist/node/extension.cjs`;
-- browser: `dist/web/extension.js` if DataTransfer/file edits work in web;
+- browser: `dist/web/extension.cjs`;
 - one browser-safe common core;
 - no Node-only path/fs assumptions;
 - no platform binaries in initial package.
 
 ### Activation
 
-The paste provider should activate contextually for supported languages/MIME operations. Contributed commands and providers must use the minimum required activation declarations for the tested VS Code range. No `onStartupFinished`.
+The paste provider uses generic `onLanguage` activation because explicit Paste As path output is available in every saved language. It performs no startup work and does not use `onStartupFinished`.
 
 ### Capabilities
 
@@ -714,7 +691,7 @@ Expose only through Paste As/explicit flow for unsupported languages.
 Priority: P0  
 Depends on: PIN-006
 
-Create unique kinds, MIME metadata, narrow selectors, built-in Markdown precedence, and no duplicate provider options.
+Create unique kinds, MIME metadata, selector/language gating, built-in Markdown precedence, and no duplicate provider options.
 
 #### PIN-019 — Implement DataTransfer candidate extraction
 Priority: P0  
@@ -722,11 +699,11 @@ Depends on: PIN-008, PIN-018
 
 Select one safe image source, deduplicate entries, preserve laziness, and honor cancellation.
 
-#### PIN-020 — Implement unresolved/resolve paste-edit pipeline
+#### PIN-020 — Implement provide/resolve paste-edit pipeline
 Priority: P0  
 Depends on: PIN-011 through PIN-019
 
-Resolve destination/name/reference, create binary resource edit with no overwrite, attach insertion, and avoid filesystem mutation before selection.
+Read and validate DataTransfer bytes within their documented lifetime; then resolve destination/name/reference, create a binary resource edit with no overwrite, attach insertion, and avoid filesystem mutation before selection.
 
 #### PIN-021 — Decide and implement command behavior
 Priority: P0  
@@ -813,6 +790,13 @@ Depends on: module-system design and demand
 #### PIN-035 — Evaluate safe SVG support
 Priority: P2  
 Depends on: dedicated active-content security review
+
+### Backlog disposition
+
+- Complete and locally verified: PIN-001 through PIN-004, PIN-006 through PIN-026, and PIN-028 through PIN-030.
+- Partially complete by declared environment: PIN-005 and PIN-027 pass on local Windows, the browser host, and a writable virtual filesystem. Real macOS, Linux, WSL, SSH, Dev Containers, Codespaces, and browser clipboard smoke tests remain release gates.
+- Pending explicit publication authorization: PIN-031.
+- Deferred post-MVP: PIN-032 through PIN-035.
 
 ---
 
