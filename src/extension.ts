@@ -1,14 +1,22 @@
 import * as vscode from "vscode";
-import { COMMANDS } from "./commands.ts";
+import {
+  PASTE_EDIT_KINDS,
+  PasteImageProvider,
+} from "./pasteProvider.ts";
+
+export { PASTE_EDIT_KINDS, PasteImageProvider } from "./pasteProvider.ts";
 
 export function activate(context: vscode.ExtensionContext): void {
-  for (const id of COMMANDS) {
-    context.subscriptions.push(
-      vscode.commands.registerCommand(id, () => {
-        void vscode.window.showErrorMessage("This command is not implemented yet.");
-      }),
-    );
-  }
+  context.subscriptions.push(
+    vscode.languages.registerDocumentPasteEditProvider(
+      { scheme: "*" },
+      new PasteImageProvider(),
+      {
+        providedPasteEditKinds: PASTE_EDIT_KINDS,
+        pasteMimeTypes: ["image/png", "image/jpeg", "image/jpg", "files"],
+      },
+    ),
+  );
 }
 
 export function deactivate(): void {}
