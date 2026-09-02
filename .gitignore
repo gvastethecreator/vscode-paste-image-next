@@ -10,5 +10,7 @@ logs/
 .scratch/
 .local/
 .code-review-graph/
+.vscode-test/
+.vscode-test-web/
 .vscode/settings.json
 test-workspace/.vscode/

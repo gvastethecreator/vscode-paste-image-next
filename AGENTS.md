@@ -1,6 +1,6 @@
 # Paste Image Next
 
-VS Code extension (`gvastethecreator.paste-image-next`). pnpm. TypeScript in `src/`. esbuild writes `dist/extension.js`.
+VS Code extension (`gvastethecreator.paste-image-next`). pnpm. TypeScript in `src/`. esbuild writes Node and browser bundles under `dist/`.
 
 ## Commands
 
@@ -41,9 +41,12 @@ Single-context: root `CONTEXT.md` plus `docs/adr/`. See `docs/agents/domain.md`.
 
 ## Layout
 
-- `src/extension.ts` — activate and command registration
-- `src/commands.ts` — command ids
+- `src/extension.ts` — paste-provider registration
+- `src/pasteProvider.ts` — VS Code paste lifecycle and workspace edit
 - `src/core/` — pure logic and tests
+- `test/` — desktop, web, and packaged Extension Host suites
+- `scripts/` — web-test build, performance, and VSIX inspection
 - `test-workspace/` — Extension Host folder
 - `docs/PDR.md` — product contract
+- `docs/adr/` — architecture decisions
 - `docs/agents/` — issue tracker, triage labels, domain docs
