@@ -182,6 +182,10 @@ Release checks cover:
 
 Non-Windows real OS clipboard smoke tests and remote/Codespaces verification remain human release gates because synthetic DataTransfer tests cannot prove operating-system clipboard metadata.
 
+## Assets
+
+`media/source/paste-image-next-approved.png` preserves the approved native-alpha icon pixels. `media/icon.png` is rendered directly from that raster source; no SVG production path remains. `media/preview.png` remains the real VS Code clipboard flow capture on a transparent 1200×800 canvas.
+
 ## Non-goals for 0.1.0
 
 - Markdown replacement;
