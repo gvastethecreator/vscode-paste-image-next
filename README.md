@@ -14,55 +14,22 @@
 
 <img src="media/preview.png" alt="Paste Image Next creating an image asset and HTML reference in VS Code" width="100%" />
 
-## Use it
+## Highlights
 
-1. Copy one PNG or JPEG image.
-2. Open an HTML, CSS, SCSS, Less, or MDX file.
-3. Use the normal VS Code **Paste** command.
+- Saves PNG or JPEG clipboard images beside your code.
+- Inserts the correct HTML, CSS, SCSS, Less, MDX, Markdown, or relative-path reference.
+- Never overwrites an existing file.
+- Undo and redo cover both the inserted reference and image asset.
 
-Use **Paste As...** when you want to choose the file name, add alt text, paste Markdown syntax, or insert only the relative path.
+## Use
 
-| Editor language | Inserted reference |
-| --- | --- |
-| HTML | `<img src="./assets/image.png" alt="">` |
-| CSS, SCSS, Less | `url("./assets/image.png")` |
-| MDX | `<img src="./assets/image.png" alt="" />` |
-| Markdown | VS Code's built-in image paste wins by default |
-| Other | **Paste As...** can insert the path |
+Copy one image, open a supported file, and use normal **Paste**. Use **Paste As...** to choose the name, alt text, syntax, or path-only result.
 
-The default destination is an `assets` folder beside the active document. Existing files are never overwritten; collisions become `image-2.png`, `image-3.png`, and so on.
+Images go to an `assets` folder beside the document by default. Native VS Code image paste keeps priority in Markdown unless you explicitly enable this extension there.
 
-## Settings
+No telemetry, network access, clipboard polling, shell commands, or temporary files.
 
-Paste Image Next uses the native VS Code Settings UI.
-
-| Setting | Default | Purpose |
-| --- | --- | --- |
-| `pasteImageNext.destination` | `${documentDir}/assets` | Choose the asset directory |
-| `pasteImageNext.filename` | `image-${date}-${time}` | Define the file-name template |
-| `pasteImageNext.askForName` | `false` | Ask for a name after an edit is selected |
-| `pasteImageNext.pathStyle` | `documentRelative` | Use document- or workspace-relative paths |
-| `pasteImageNext.markdown.enabled` | `false` | Join normal Markdown paste while yielding to VS Code |
-| `pasteImageNext.maximumFileSizeMiB` | `50` | Accept 1–100 MiB per image |
-
-Destination tokens: `${documentDir}`, `${workspaceFolder}`, `${documentName}`.
-
-Filename tokens: `${date}`, `${time}`, `${documentName}`, `${name}`, `${counter}`.
-
-## Important behavior
-
-- PNG and JPEG only. Bytes are preserved; there is no conversion or optimization.
-- One image per paste.
-- No network access, telemetry, clipboard polling, shell command, native helper, or temporary file.
-- Markdown Ctrl+V remains VS Code's behavior unless you explicitly enable the Markdown setting.
-- Untitled documents and read-only filesystems cannot receive an asset.
-- Undo removes both the inserted reference and the created asset. Redo restores both, including later changes to that asset.
-
-Desktop, browser, and writable virtual-workspace bundles are included. Windows is verified locally; Windows, macOS, Linux, minimum-version, web, and package checks run in CI. Remote Development and Codespaces must pass a packaged smoke test before they are advertised as verified.
-
-## Development
-
-Use pnpm. See [development](docs/development.md), [product contract](docs/PDR.md), and [publishing](docs/publishing.md).
+More details: [product contract](docs/PDR.md) · [platform support](docs/platform-matrix.md) · [development](docs/development.md)
 
 ---
 
