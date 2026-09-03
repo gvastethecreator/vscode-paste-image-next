@@ -1,5 +1,5 @@
-Repo: X:\vscode-extensions\vscode-paste-image-next
-Remote: private (gvastethecreator/vscode-paste-image-next)
+Repo: https://github.com/gvastethecreator/vscode-paste-image-next
+Remote: public (gvastethecreator/vscode-paste-image-next)
 
 # PDR — Paste Image Next
 
@@ -177,14 +177,14 @@ Release checks cover:
 - current stable plus declared minimum VS Code;
 - Windows, macOS, and Linux hosted jobs;
 - production bundles and performance budgets;
-- minimal VSIX contents and alpha-bearing 256 px icon / 1200 by 800 preview;
+- minimal VSIX contents and alpha-bearing 256 px icon / tightly cropped native-alpha preview;
 - clean-profile VSIX installation and activation.
 
 Non-Windows real OS clipboard smoke tests and remote/Codespaces verification remain human release gates because synthetic DataTransfer tests cannot prove operating-system clipboard metadata.
 
 ## Assets
 
-`media/source/paste-image-next-approved.png` preserves the approved native-alpha icon pixels. `media/icon.png` is rendered directly from that raster source; no SVG production path remains. `media/preview.png` remains the real VS Code clipboard flow capture on a transparent 1200×800 canvas.
+`media/source/paste-image-next-approved.png` preserves the approved native-alpha icon pixels. `media/icon.png` is rendered directly from that raster source; no SVG production path remains. `media/preview.png` is the real installed-extension clipboard flow, cropped to Explorer, the HTML editor, and the created image preview with a transparent outer edge.
 
 ## Non-goals for 0.1.0
 

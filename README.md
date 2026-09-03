@@ -12,7 +12,7 @@
 </p>
 </div>
 
-<img src="media/preview.png" alt="A real VS Code session after Paste Image Next created an image asset and inserted its HTML reference" width="100%" />
+<img src="media/preview.png" alt="Paste Image Next creating an image asset and HTML reference in VS Code" width="100%" />
 
 ## Use it
 
