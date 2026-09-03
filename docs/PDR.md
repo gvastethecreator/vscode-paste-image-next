@@ -184,7 +184,7 @@ Non-Windows real OS clipboard smoke tests and remote/Codespaces verification rem
 
 ## Assets
 
-`media/source/paste-image-next-approved.png` preserves the approved native-alpha icon pixels. `media/icon.png` is rendered directly from that raster source; no SVG production path remains. `media/preview.png` is the real installed-extension clipboard flow, cropped to Explorer, the HTML editor, and the created image preview with a transparent outer edge.
+`media/source/paste-image-next-imagegen-raw.png` retains the generated concept with a photo card outside and overlapping the document. `media/source/paste-image-next-approved.png` preserves the accepted crisp vectorized-3D native-alpha pixels with a thin transparent safety margin. `media/icon.png` is rendered directly from that raster source; no SVG production path remains. `media/preview.png` is the real installed-extension clipboard flow, cropped to Explorer, the HTML editor, and the created image preview with a transparent outer edge.
 
 ## Non-goals for 0.1.0
 

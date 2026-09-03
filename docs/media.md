@@ -4,14 +4,15 @@
 
 The icon uses the product metaphor “an image entering a document.” It was designed for a 32 px extension list first, then exported at 256 px for the Marketplace.
 
-- Concept source: OpenAI built-in image generation, 2026-09-02, output id `exec-25014127-2f2c-4d3e-974b-526ccf204af1`.
-- Approved production raster: `media/source/paste-image-next-approved.png`, locked from the user-approved cleanup of the generated concept.
+- Concept source: OpenAI built-in image generation output `exec-fc2510cb-e358-46eb-809f-49d3f4639f65`, generated directly as native RGBA and retained as `media/source/paste-image-next-imagegen-raw.png`.
+- Approved production raster: `media/source/paste-image-next-approved.png`, normalized to a thin transparent safety margin without redrawing the generated art.
 - Package asset: `media/icon.png`, 256 by 256 RGBA.
-- Palette: deep navy, clear blue, warm amber, restrained teal, and matte ivory.
-- Finish: flat 2D with overlap depth only; no glow, glass, gloss, shine, neon, tile, or background.
+- Palette: graphite, white, cool light gray, coral, orange, and violet; no France blue or emerald.
+- Composition: the photo card sits outside and in front of the document, while the orange arrow makes the paste direction readable at extension-list size.
+- Finish: crisp vectorized 3D with shallow plane depth and compact vector shadows; no plastic, glow, glass, gloss, tile, or background.
 - Alpha check: all four corner pixels are fully transparent; 32 px and 64 px exports were visually inspected.
 
-The generated concept established the image/document silhouette. The approved raster preserves the cleaned flat result directly; no SVG reinterpretation remains.
+The generated concept established the external-image/document silhouette. The approved raster preserves it directly; no SVG reinterpretation remains. SHA-256: raw `16078ED3FA2A439E2DBD07EF22D3308F3FCA100774A8B70211BD611A9076C999`, approved `05F87B1893D34FF0A7612639F0CB4136690A25358A3BE48F6133CA999EC574A3`, production `1CB0D0D3D545CD661C2CED2ADC6050790F632F7E0EBA06AB19869B1472C8658C`.
 
 ## Marketplace preview
 
