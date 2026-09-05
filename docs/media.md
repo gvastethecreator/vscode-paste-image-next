@@ -4,15 +4,15 @@
 
 The icon uses the product metaphor “an image entering a document.” It was designed for a 32 px extension list first, then exported at 256 px for the Marketplace.
 
-- Concept source: OpenAI built-in image generation output `exec-fc2510cb-e358-46eb-809f-49d3f4639f65`, generated directly as native RGBA and retained as `media/source/paste-image-next-imagegen-raw.png`.
+- Concept source: OpenAI built-in image generation output `exec-f503e020-0fbd-4861-93ad-22de7e5828c4`, retained as `media/source/paste-image-next-imagegen-raw.png`; native-alpha extraction output `exec-292cfd2f-e49c-49ca-b4ac-79703fc554f3` produced the accepted cutout.
 - Approved production raster: `media/source/paste-image-next-approved.png`, normalized to a thin transparent safety margin without redrawing the generated art.
 - Package asset: `media/icon.png`, 256 by 256 RGBA.
 - Palette: graphite, white, cool light gray, coral, orange, and violet; no France blue or emerald.
-- Composition: the photo card sits outside and in front of the document, while the orange arrow makes the paste direction readable at extension-list size.
-- Finish: crisp vectorized 3D with shallow plane depth and compact vector shadows; no plastic, glow, glass, gloss, tile, or background.
+- Composition: the image card sits outside and in front of one document, while the orange arrow makes the paste direction readable at extension-list size.
+- Finish: Tag Mate-style crisp vectorized semi-3D with shallow plane depth, controlled gradients, and compact vector shadows; no plastic, glow, glass, gloss, tile, or background.
 - Alpha check: all four corner pixels are fully transparent; 32 px and 64 px exports were visually inspected.
 
-The generated concept established the external-image/document silhouette. The approved raster preserves it directly; no SVG reinterpretation remains. SHA-256: raw `16078ED3FA2A439E2DBD07EF22D3308F3FCA100774A8B70211BD611A9076C999`, approved `05F87B1893D34FF0A7612639F0CB4136690A25358A3BE48F6133CA999EC574A3`, production `1CB0D0D3D545CD661C2CED2ADC6050790F632F7E0EBA06AB19869B1472C8658C`.
+The generated concept established the external-image/document silhouette. The approved raster preserves it directly; no SVG reinterpretation remains. SHA-256: raw `40506E24DB06EE81720F6CA9F5E7E7D144BC4A03AAADE2498995ED229ECA28D1`, approved `3C42C6ACB280E18D5DE5BE27E78A38DCEF0FF23998DA5A73DA3670652E508DBF`, production `EF1B66EEBD4E1CB7F957F9C9045F60B337DAD46E9315B4085F6259076F30E34E`.
 
 ## Marketplace preview
 

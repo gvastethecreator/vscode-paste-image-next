@@ -107,7 +107,7 @@ A file appearing after allocation causes the whole edit to fail instead of being
 - Pure filename, media, destination, path, and formatter modules under src/core.
 - Lazy onLanguage activation with no startup scan.
 - Provider registered through VS Code APIs only.
-- No commands because stable VS Code APIs do not expose a safe custom command that invokes native binary paste.
+- No paste commands. Stable VS Code APIs do not expose a safe custom command that invokes native binary paste. `Paste Image Next: Set Defaults` writes factory settings to user and workspace scope.
 - No native helper, shell, temporary file, daemon, network request, telemetry, or runtime dependency.
 - Host preference: ui first, workspace second. VS Code APIs route filesystem work to the active workspace, while the browser bundle covers web hosts.
 
@@ -184,7 +184,7 @@ Non-Windows real OS clipboard smoke tests and remote/Codespaces verification rem
 
 ## Assets
 
-`media/source/paste-image-next-imagegen-raw.png` retains the generated concept with a photo card outside and overlapping the document. `media/source/paste-image-next-approved.png` preserves the accepted crisp vectorized-3D native-alpha pixels with a thin transparent safety margin. `media/icon.png` is rendered directly from that raster source; no SVG production path remains. `media/preview.png` is the real installed-extension clipboard flow, cropped to Explorer, the HTML editor, and the created image preview with a transparent outer edge.
+`media/source/paste-image-next-imagegen-raw.png` retains the generated concept with an image card outside and overlapping one document. `media/source/paste-image-next-approved.png` is the accepted crisp vectorized semi-3D native-alpha raster with a clear transfer arrow, controlled gradient depth, and a thin transparent safety margin. `media/icon.png` is rendered directly from that raster source; no SVG production path remains. `media/preview.png` is the real installed-extension clipboard flow, cropped to Explorer, the HTML editor, and the created image preview with a transparent outer edge.
 
 ## Non-goals for 0.1.0
 

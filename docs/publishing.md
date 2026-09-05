@@ -4,6 +4,8 @@ Extension id: `gvastethecreator.paste-image-next`.
 
 Do not publish, tag, create a release, or upload to a registry without explicit owner authorization.
 
+The **Release** workflow starts from **Actions → Release → Run workflow**. Default input `artifact-only` does not publish.
+
 ## Build the candidate
 
 ```powershell
@@ -16,7 +18,7 @@ pnpm run inspect:vsix
 pnpm run test:vsix
 ```
 
-The package command writes `paste-image-next.vsix`. The repository does not contain an automatic publish workflow. The manual **Release candidate** workflow builds and uploads a review artifact only.
+The package command writes `paste-image-next.vsix`.
 
 ## Human release gates
 
@@ -30,6 +32,28 @@ The package command writes `paste-image-next.vsix`. The repository does not cont
 - Check the Marketplace and Open VSX name/ownership state.
 - Approve the version, release notes, commit, tag, registry uploads, and GitHub Release separately.
 
+## GitHub Actions
+
+1. Run **Release** with `artifact-only` from `main`.
+2. After approval, run one of `github-release`, `vscode-marketplace`, or `open-vsx`.
+3. Run one registry at a time.
+
+Environments `github-release`, `vscode-marketplace`, and `open-vsx` accept `main` only. Do not store `VSCE_PAT` or `OVSX_PAT` until the owner asks to publish.
+
 ## Registry upload
 
-After approval, use current official tooling and least-privilege secrets. Publish the same frozen VSIX bytes to each compatible registry; do not rebuild between review and upload.
+After approval, publish the same frozen VSIX bytes to each compatible registry. Do not rebuild between review and upload.
+
+Marketplace: upload the exact verified VSIX at [Marketplace management](https://marketplace.visualstudio.com/manage).
+
+Open VSX:
+
+```powershell
+pnpm exec ovsx publish .\paste-image-next.vsix -p $env:OVSX_PAT
+```
+
+Never place a PAT in a command, an issue, a log, or a document.
+
+## Rollback
+
+Prefer a forward patch. Do not rewrite a public tag or replace bytes under an existing version.

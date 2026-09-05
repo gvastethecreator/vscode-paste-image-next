@@ -2,6 +2,7 @@
 
 ## 0.1.0 — Unreleased
 
+- Added a Set Defaults command that writes factory settings to user and workspace scope.
 - Paste one PNG or JPEG into HTML, CSS, SCSS, Less, or MDX through VS Code's native paste flow.
 - Add explicit Paste As choices for names, alt text, Markdown, and path-only output.
 - Create assets and references as one no-overwrite workspace edit with deterministic collision names.
