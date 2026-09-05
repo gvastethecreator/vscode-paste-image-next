@@ -1,0 +1,343 @@
+{
+  "generated_at": "2026-09-05T04:45:27Z",
+  "generated_from_commit": "b533ee0cb408a75bb22aa553c0f40e7b7693df30",
+  "scope": [
+    "."
+  ],
+  "nodes": [
+    {
+      "id": "esbuild",
+      "path": "esbuild.cjs",
+      "type": "interface",
+      "boundary": "Esbuild",
+      "entrypoints": [
+        "esbuild.cjs:main"
+      ],
+      "tests": [],
+      "callers": [
+        {
+          "id": "repository",
+          "type": "calls"
+        }
+      ],
+      "callees": [
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        }
+      ],
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "esbuild.cjs",
+            "symbol": "main"
+          }
+        ]
+      }
+    },
+    {
+      "id": "external-dependencies",
+      "path": "esbuild.cjs",
+      "type": "external",
+      "boundary": "External",
+      "entrypoints": [
+        "esbuild.cjs:esbuild"
+      ],
+      "tests": [],
+      "callers": [
+        {
+          "id": "esbuild",
+          "type": "imports"
+        },
+        {
+          "id": "scripts",
+          "type": "imports"
+        },
+        {
+          "id": "src",
+          "type": "imports"
+        }
+      ],
+      "callees": [],
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "esbuild.cjs",
+            "symbol": "esbuild"
+          }
+        ]
+      }
+    },
+    {
+      "id": "repository",
+      "path": "package.json",
+      "type": "module",
+      "boundary": "Repository",
+      "entrypoints": [
+        "package.json:{"
+      ],
+      "tests": [],
+      "callers": [],
+      "callees": [
+        {
+          "id": "esbuild",
+          "type": "calls"
+        },
+        {
+          "id": "scripts",
+          "type": "calls"
+        }
+      ],
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "package.json",
+            "symbol": "{"
+          }
+        ]
+      }
+    },
+    {
+      "id": "scripts",
+      "path": "scripts",
+      "type": "service",
+      "boundary": "Scripts",
+      "entrypoints": [
+        "scripts/build-web-tests.mjs:root"
+      ],
+      "tests": [],
+      "callers": [
+        {
+          "id": "repository",
+          "type": "calls"
+        }
+      ],
+      "callees": [
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        },
+        {
+          "id": "src-core",
+          "type": "imports"
+        }
+      ],
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "scripts/build-web-tests.mjs",
+            "symbol": "root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "src",
+      "path": "src",
+      "type": "module",
+      "boundary": "Src",
+      "entrypoints": [
+        "src/extension.ts:setDefaultSettings"
+      ],
+      "tests": [
+        "test/web/suite/index.ts"
+      ],
+      "callers": [],
+      "callees": [
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        },
+        {
+          "id": "src-core",
+          "type": "imports"
+        }
+      ],
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "src/extension.ts",
+            "symbol": "setDefaultSettings"
+          }
+        ]
+      }
+    },
+    {
+      "id": "src-core",
+      "path": "src/core",
+      "type": "service",
+      "boundary": "Src",
+      "entrypoints": [
+        "src/core/filename.ts:buildFilename"
+      ],
+      "tests": [
+        "src/core/filename.test.ts",
+        "src/core/formatters.test.ts",
+        "src/core/media.test.ts",
+        "src/core/paths.test.ts"
+      ],
+      "callers": [
+        {
+          "id": "scripts",
+          "type": "imports"
+        },
+        {
+          "id": "src",
+          "type": "imports"
+        }
+      ],
+      "callees": [],
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "src/core/filename.ts",
+            "symbol": "buildFilename"
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "esbuild",
+      "to": "external-dependencies",
+      "type": "imports",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "esbuild.cjs",
+            "symbol": "esbuild"
+          }
+        ]
+      }
+    },
+    {
+      "from": "repository",
+      "to": "esbuild",
+      "type": "calls",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "package.json",
+            "symbol": "esbuild.cjs"
+          }
+        ]
+      }
+    },
+    {
+      "from": "repository",
+      "to": "scripts",
+      "type": "calls",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "package.json",
+            "symbol": "scripts/inspect-vsix.mjs"
+          },
+          {
+            "path": "package.json",
+            "symbol": "scripts/performance.mjs"
+          },
+          {
+            "path": "package.json",
+            "symbol": "scripts/render-media.mjs"
+          }
+        ]
+      }
+    },
+    {
+      "from": "scripts",
+      "to": "external-dependencies",
+      "type": "imports",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "scripts/build-web-tests.mjs",
+            "symbol": "esbuild"
+          },
+          {
+            "path": "scripts/check-media.mjs",
+            "symbol": "sharp"
+          },
+          {
+            "path": "scripts/inspect-vsix.mjs",
+            "symbol": "yauzl"
+          }
+        ]
+      }
+    },
+    {
+      "from": "scripts",
+      "to": "src-core",
+      "type": "imports",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "scripts/performance.mjs",
+            "symbol": "../src/core/filename.ts"
+          },
+          {
+            "path": "scripts/performance.mjs",
+            "symbol": "../src/core/formatters.ts"
+          },
+          {
+            "path": "scripts/performance.mjs",
+            "symbol": "../src/core/media.ts"
+          }
+        ]
+      }
+    },
+    {
+      "from": "src",
+      "to": "external-dependencies",
+      "type": "imports",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "src/extension.ts",
+            "symbol": "vscode"
+          },
+          {
+            "path": "src/pasteProvider.ts",
+            "symbol": "vscode"
+          }
+        ]
+      }
+    },
+    {
+      "from": "src",
+      "to": "src-core",
+      "type": "imports",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "src/pasteProvider.ts",
+            "symbol": "./core/filename.ts"
+          },
+          {
+            "path": "src/pasteProvider.ts",
+            "symbol": "./core/formatters.ts"
+          },
+          {
+            "path": "src/pasteProvider.ts",
+            "symbol": "./core/media.ts"
+          }
+        ]
+      }
+    }
+  ],
+  "flows": []
+}

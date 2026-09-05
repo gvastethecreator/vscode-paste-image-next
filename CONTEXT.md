@@ -26,6 +26,5 @@ Node, browser, and writable virtual-filesystem paths are implemented. Local Wind
 - Architecture decision: `docs/adr/0001-native-paste-provider.md`
 - Platform matrix: `docs/platform-matrix.md`
 - Media provenance: `docs/media.md`
-- Delivery record: `docs/DELIVERY-PLAN.md`
 
 Publishing, tags, releases, registry uploads, commits, pushes, and remote tracker changes require explicit owner authorization.
