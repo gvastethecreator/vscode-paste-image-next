@@ -1,12 +1,13 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.1] - 2026-10-26
 
+- Refreshed README screenshots from the packaged extension running in stable VS Code.
 - Fixed: the unsupported-media message lists PNG, JPEG, WebP, and GIF.
 - Paste offers no edit in documents without a writable file system, such as notebook cells, and keeps native paste.
 - The paste provider accepts original PNG, JPEG, WebP and GIF bytes supplied by VS Code. It validates the MIME, extension and container signature, preserves the supplied bytes, and does not decode or transcode images. An original WebP/GIF representation takes priority over a PNG representation. The details flow suggests a safe source filename and editable alt text. Empty alt text remains valid for decorative images. Document changes during prompts reject the edit. Native Markdown paste retains priority; multi-file drop remains outside this release.
 
-## 0.1.0 — Unreleased
+## 0.1.0 — Local candidate
 
 - Added a Set Defaults command that writes factory settings to user and workspace scope.
 - Paste one PNG or JPEG into HTML, CSS, SCSS, Less, or MDX through VS Code's native paste flow.

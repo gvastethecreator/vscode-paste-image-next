@@ -2,7 +2,7 @@
   "name": "paste-image-next",
   "displayName": "Paste Image Next",
   "description": "Paste a clipboard image into the project and insert a file reference.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packageManager": "pnpm@12.15.0",
   "publisher": "gvastethecreator",
   "author": {

@@ -1,7 +1,7 @@
 # Code map: vscode-paste-image-next
 
-Generated: 2026-10-26T04:43:28Z | Commit: `cb17d21ee3b3` | Schema: 2
-Generation: `0e23a8d9257d6f764a8d7b96f2a4030b863d978c200ba0a61496aec700af4577`
+Generated: 2026-10-26T07:24:19Z | Commit: `a1ca1b53f1a2` | Schema: 2
+Generation: `31f31fd7db6510b1c54f9207022b7e2e07397d8752259c9b0789f13e39eef00e`
 Scope: . | Inventory: working-tree
 Nodes: 43 | Edges: 116 | Flows: 0
 
@@ -9,7 +9,7 @@ Nodes: 43 | Edges: 116 | Flows: 0
 
 - Analysis: **partial**; 26 analyzed of 27 included files.
 - Configuration files: 1; omitted untracked files: 0.
-- Unresolved references and analysis limits: 210.
+- Unresolved references and analysis limits: 211.
 - Static references and call paths do not prove runtime execution or test coverage.
 
 ## Modules
