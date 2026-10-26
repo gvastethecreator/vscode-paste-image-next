@@ -1,12 +1,12 @@
 {
   "schema_version": 2,
-  "source_commit": "16663bde7bfca740786e93811beee266b0170f8d",
+  "source_commit": "cb17d21ee3b3140080dd919bf20769d5d850ddcf",
   "working_tree_dirty": true,
-  "generated_at": "2026-09-07T03:20:43Z",
-  "generation_id": "9c6722bca6f2920f8129df577e8c4b933f4e16d80f6952a373dee804fc3f2c70",
+  "generated_at": "2026-10-26T04:43:28Z",
+  "generation_id": "0e23a8d9257d6f764a8d7b96f2a4030b863d978c200ba0a61496aec700af4577",
   "analysis": {
     "version": "syntax-1",
-    "digest": "3c79d1c345c40f78e72d86e76fcdb0c240c137eb03778015ce78f994b43e3ccf"
+    "digest": "aac5588c813568478eb34b9cb090e19685ad183efe6d8b3496f261834a7c0f44"
   },
   "inventory": {
     "policy": {
@@ -53,8 +53,8 @@
         "path": "package.json",
         "origin": "tracked",
         "state": "present",
-        "digest": "5dbc59ea5e62218cca1e8f81a65c2de532fcda205f76c2afd4169688efce43a5",
-        "size": 5250
+        "digest": "70605f10eb779c8994c82ae058c89a748f338ff44df2662b6844c60b382ddb45",
+        "size": 5226
       },
       {
         "path": "scripts/build-web-tests.mjs",
@@ -86,7 +86,7 @@
       },
       {
         "path": "scripts/release-artifact.mjs",
-        "origin": "untracked",
+        "origin": "tracked",
         "state": "present",
         "digest": "22d3b41f2b8372e224466db0a33ae9686e4b99ee8fa3b45e713a20207e51ea69",
         "size": 5219
@@ -165,12 +165,12 @@
         "path": "src/pasteProvider.ts",
         "origin": "tracked",
         "state": "present",
-        "digest": "fd81c4fafe78e91e26a8d20133f1b652b1de21333cefc74d22a603d0ce4e0d5c",
-        "size": 15570
+        "digest": "5cb29d4d1f5186fa014e12f7b67d825460157c4062fbd3a8e2c1ace3920cd80f",
+        "size": 15908
       },
       {
         "path": "src/settingsActions.ts",
-        "origin": "untracked",
+        "origin": "tracked",
         "state": "present",
         "digest": "2d9238bfb5bac72260aefe2e61375e542b733efe4b0123de61798144ac6b8ab1",
         "size": 2810
@@ -232,12 +232,12 @@
         "size": 375
       }
     ],
-    "digest": "d86bd56d35619fa44e6142f01d8d786238a1ce32e35b8a49588bb27b78293206"
+    "digest": "d687ad36ed9f57f6c2e37ce0a30903c46a9aa3da36b579503f02beb76d732c41"
   },
-  "source_digest": "574a61cab1469e13b62373290d23744f08a327a011e2f8ec2fc111a4b7f2a118",
+  "source_digest": "c310c7d281486dda7b0f3ac91ab15ddf2d99b55ce4703b2a216d8af66bd81cfb",
   "artifact_hashes": {
-    "codemap.json": "c5e3cf3e1218c5c1d92fe289b6b61ab567a8c54bebded8f1451cf783c5837aa8",
-    "codemap.md": "4818bde6eb790a9986264458ac4381d2535b3be83d5ac71c3bf45ee9fd7722f0",
-    "codemap.html": "b6ddddd8cc9970afa69337fd9c471f3d3f715f2afe320ca88053bce28ae59a89"
+    "codemap.json": "b442a61f29104a4e6e5da30c65944b0cfacfc1b947ef2b9ec23d623f0351f76a",
+    "codemap.md": "cc58258a80c80564c8edc8d55bab2e2adc8f4ad7cbd39901b36a2ade7585c392",
+    "codemap.html": "7bcc87733050b3643e3abfa6dc174cc9f367c093acafc7836ced3ee992b85f35"
   }
 }

@@ -1,7 +1,7 @@
 # Code map: vscode-paste-image-next
 
-Generated: 2026-09-07T03:20:43Z | Commit: `16663bde7bfc` | Schema: 2
-Generation: `9c6722bca6f2920f8129df577e8c4b933f4e16d80f6952a373dee804fc3f2c70`
+Generated: 2026-10-26T04:43:28Z | Commit: `cb17d21ee3b3` | Schema: 2
+Generation: `0e23a8d9257d6f764a8d7b96f2a4030b863d978c200ba0a61496aec700af4577`
 Scope: . | Inventory: working-tree
 Nodes: 43 | Edges: 116 | Flows: 0
 
@@ -111,7 +111,7 @@ Nodes: 43 | Edges: 116 | Flows: 0
 
 ## Architecture changes
 
-- Nodes: +3 / -0; edges: +10 / -19.
+- Nodes: +0 / -0; edges: +0 / -0.
 - Boundary changes: 0; new cycles: 0.
 
 ## Read next
